@@ -22,12 +22,12 @@ export class CountryDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    let countryName: string | null = null
-    this.route.paramMap.subscribe((param: ParamMap) => countryName = param.get('countryName'));
+    let countryId: string | null = null
+    this.route.paramMap.subscribe((param: ParamMap) => countryId = param.get('id'));
     this.http.get<any[]>(this.olympicUrl).pipe().subscribe(
       (data) => {
         if (data && data.length > 0) {
-          const selectedCountry = data.find((i: any) => i.country === countryName);
+          const selectedCountry = data.find((i: any) => i.country === countryId);
           this.titlePage = selectedCountry.country;
           const participations = selectedCountry?.participations.map((i: any) => i);
           this.totalEntries = participations?.length ?? 0;
