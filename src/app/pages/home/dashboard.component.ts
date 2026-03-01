@@ -1,7 +1,7 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
-import Chart from 'chart.js/auto';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import { PieChartComponent } from 'src/app/components/charts/pie-chart/pie-chart.component';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -10,13 +10,15 @@ import Chart from 'chart.js/auto';
 })
 export class DashboardComponent implements OnInit {
   private olympicUrl = './assets/mock/olympic.json';
-  public pieChart!: Chart<"pie", number[], string>;
   public totalCountries: number = 0
   public totalJOs: number = 0
   public error!:string
   titlePage: string = "Medals per Country";
 
-  constructor(private router: Router, private http:HttpClient) { }
+  @ViewChild(PieChartComponent)
+  pieChartComponent!: PieChartComponent;
+
+  constructor(private http:HttpClient) { }
 
   ngOnInit() {
     this.http.get<any[]>(this.olympicUrl).pipe().subscribe(
@@ -28,7 +30,7 @@ export class DashboardComponent implements OnInit {
           this.totalCountries = countries.length;
           const medals = data.map((i: any) => i.participations.map((i: any) => (i.medalsCount)));
           const sumOfAllMedalsYears = medals.map((i) => i.reduce((acc: any, i: any) => acc + i, 0));
-          this.buildPieChart(countries, sumOfAllMedalsYears);
+          this.pieChartComponent.buildChart(countries, sumOfAllMedalsYears);
         }
       },
       (error:HttpErrorResponse) => {
@@ -36,35 +38,6 @@ export class DashboardComponent implements OnInit {
         this.error = error.message
       }
     )
-  }
-
-  buildPieChart(countries: string[], sumOfAllMedalsYears: number[]) {
-    const pieChart = new Chart("DashboardPieChart", {
-      type: 'pie',
-      data: {
-        labels: countries,
-        datasets: [{
-          label: 'Medals',
-          data: sumOfAllMedalsYears,
-          backgroundColor: ['#0b868f', '#adc3de', '#7a3c53', '#8f6263', 'orange', '#94819d'],
-          hoverOffset: 4
-        }],
-      },
-      options: {
-        aspectRatio: 2.5,
-        onClick: (e) => {
-          if (e.native) {
-            const points = pieChart.getElementsAtEventForMode(e.native, 'point', { intersect: true }, true)
-            if (points.length) {
-              const firstPoint = points[0];
-              const countryId = pieChart.data.labels ? pieChart.data.labels[firstPoint.index] : '';
-              this.router.navigate(['country', countryId]);
-            }
-          }
-        }
-      }
-    });
-    this.pieChart = pieChart;
   }
 }
 

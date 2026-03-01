@@ -1,7 +1,7 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import Chart from 'chart.js/auto';
+import {LineChartComponent} from 'src/app/components/charts/line-chart/line-chart.component';
 
 
 @Component({
@@ -11,12 +11,14 @@ import Chart from 'chart.js/auto';
 })
 export class CountryDetailComponent implements OnInit {
   private olympicUrl = './assets/mock/olympic.json';
-  public lineChart!: Chart<"line", string[], number>;
   public titlePage: string = '';
   public totalEntries: any = 0;
   public totalMedals: number = 0;
   public totalAthletes: number = 0;
   public error!: string;
+
+  @ViewChild(LineChartComponent)
+  lineChartComponent!: LineChartComponent;
 
   constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {
   }
@@ -36,7 +38,7 @@ export class CountryDetailComponent implements OnInit {
           this.totalMedals = medals.reduce((accumulator: any, item: any) => accumulator + parseInt(item), 0);
           const nbAthletes = selectedCountry?.participations.map((i: any) => i.athleteCount.toString()) ?? []
           this.totalAthletes = nbAthletes.reduce((accumulator: any, item: any) => accumulator + parseInt(item), 0);
-          this.buildChart(years, medals);
+          this.lineChartComponent.buildChart(years, medals);
         }
       },
       (error: HttpErrorResponse) => {
@@ -45,23 +47,4 @@ export class CountryDetailComponent implements OnInit {
     );
   }
 
-  buildChart(years: number[], medals: string[]) {
-    const lineChart = new Chart("countryChart", {
-      type: 'line',
-      data: {
-        labels: years,
-        datasets: [
-          {
-            label: "medals",
-            data: medals,
-            backgroundColor: '#0b868f'
-          },
-        ]
-      },
-      options: {
-        aspectRatio: 2.5
-      }
-    });
-    this.lineChart = lineChart;
-  }
 }
