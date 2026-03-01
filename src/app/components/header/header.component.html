@@ -1,0 +1,13 @@
+<div>
+  <div class="center">
+      <div>{{ titlePage }}</div>
+  </div>
+  <div class="split">
+    @for (kpiCard of kpiCards; track kpiCard.label) {
+      <app-kpi-card 
+        [label]="kpiCard.label" 
+        [value]="kpiCard.value">
+      </app-kpi-card>
+    }
+  </div>
+</div>
