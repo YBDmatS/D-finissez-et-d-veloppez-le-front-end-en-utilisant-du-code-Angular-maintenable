@@ -16,7 +16,7 @@ export class CountryDetailComponent implements OnInit {
   public totalMedals: number = 0;
   public totalAthletes: number = 0;
   public error!: string;
-  public kpiCards: { label: string, value: number }[] = [];  
+  public kpis: { label: string, value: number }[] = [];  
 
   @ViewChild(LineChartComponent)
   lineChartComponent!: LineChartComponent;
@@ -39,7 +39,7 @@ export class CountryDetailComponent implements OnInit {
           this.totalMedals = medals.reduce((accumulator: any, item: any) => accumulator + parseInt(item), 0);
           const nbAthletes = selectedCountry?.participations.map((i: any) => i.athleteCount.toString()) ?? []
           this.totalAthletes = nbAthletes.reduce((accumulator: any, item: any) => accumulator + parseInt(item), 0);
-          this.kpiCards = [
+          this.kpis = [
             { label: 'Number of entries', value: this.totalEntries },
             { label: 'Total Number of medals', value: this.totalMedals },
             { label: 'Total Number of athletes', value: this.totalAthletes }

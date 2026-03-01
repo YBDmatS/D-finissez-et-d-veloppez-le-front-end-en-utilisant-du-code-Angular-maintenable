@@ -10,6 +10,7 @@ import { PieChartComponent } from "src/app/components/charts/pie-chart/pie-chart
 import { LineChartComponent } from './components/charts/line-chart/line-chart.component';
 import { KpiCardComponent } from './components/kpi-card/kpi-card.component';
 import { HeaderComponent } from './components/header/header.component';
+import { DashboardLayoutComponent } from './components/layouts/dashboard-layout/dashboard-layout.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HeaderComponent } from './components/header/header.component';
     PieChartComponent, 
     LineChartComponent,
     KpiCardComponent,
-    HeaderComponent
+    HeaderComponent,
+    DashboardLayoutComponent
   ],
   imports: [
     BrowserModule, 
