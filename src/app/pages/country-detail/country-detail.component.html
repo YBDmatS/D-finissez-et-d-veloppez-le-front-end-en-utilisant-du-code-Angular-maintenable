@@ -1,8 +1,7 @@
-<div>
-  <app-header
-    [titlePage]="titlePage"
-    [kpiCards]="kpiCards">
-  </app-header>
+<app-dashboard-layout
+  [titlePage]="titlePage"
+  [kpis]="kpis">
+
   <div class="chart-container wrapper-container">
     <div class="container">
       <app-line-chart></app-line-chart>
@@ -12,4 +11,4 @@
   <div class="center">
     <a routerLink="">Go back</a>
   </div>
-</div>
+</app-dashboard-layout>

@@ -8,5 +8,5 @@ import { KpiCardComponent } from '../kpi-card/kpi-card.component';
 })
 export class HeaderComponent {
   @Input() public titlePage!: string;
-  @Input() public kpiCards!: { label: string, value: number }[];
+  @Input() public kpis!: { label: string, value: number }[];
 }

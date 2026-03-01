@@ -1,9 +1,7 @@
 <h2>Olympic games app</h2>
 <hr/>
-<div>
-  <app-header 
-  [titlePage]="titlePage", 
-  [kpiCards]="kpiCards" >
-</app-header>
-  <app-pie-chart></app-pie-chart>
-</div>
+<app-dashboard-layout
+  [titlePage]="titlePage",
+  [kpis]="kpis"> 
+  <app-pie-chart></app-pie-chart> 
+</app-dashboard-layout>

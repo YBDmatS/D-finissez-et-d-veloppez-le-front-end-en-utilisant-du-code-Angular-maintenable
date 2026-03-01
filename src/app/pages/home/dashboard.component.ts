@@ -14,7 +14,7 @@ export class DashboardComponent implements OnInit {
   public totalJOs: number = 0
   public error!:string
   public titlePage: string = "Medals per Country";
-  public kpiCards: { label: string, value: number }[] = [];  
+  public kpis: { label: string, value: number }[] = [];  
 
   @ViewChild(PieChartComponent)
   pieChartComponent!: PieChartComponent;
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
           this.totalJOs = Array.from(new Set(data.map((i: any) => i.participations.map((f: any) => f.year)).flat())).length;
           const countries: string[] = data.map((i: any) => i.country);
           this.totalCountries = countries.length;
-          this.kpiCards = [
+          this.kpis = [
             { label: 'Number of countries', value: this.totalCountries },
             { label: 'Number of JOs', value: this.totalJOs }
           ];  
