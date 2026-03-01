@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Kpi } from 'src/app/models/kpi.model';
 
 @Component({
   selector: 'app-kpi-card',
@@ -6,7 +7,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './kpi-card.component.scss'
 })
 export class KpiCardComponent {
-
-  @Input() public label!: string;
-  @Input() public value!: number;
+  @Input() public kpi!: Kpi
 }

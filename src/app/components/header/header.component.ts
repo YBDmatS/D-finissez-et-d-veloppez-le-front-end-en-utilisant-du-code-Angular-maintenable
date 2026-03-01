@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { KpiCardComponent } from '../kpi-card/kpi-card.component';
+import { Kpi } from 'src/app/models/kpi.model';
 
 @Component({
   selector: 'app-header',
@@ -8,5 +8,5 @@ import { KpiCardComponent } from '../kpi-card/kpi-card.component';
 })
 export class HeaderComponent {
   @Input() public titlePage!: string;
-  @Input() public kpis!: { label: string, value: number }[];
+  @Input() public kpis!: Kpi[];
 }

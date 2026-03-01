@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Kpi } from 'src/app/models/kpi.model';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -7,5 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class DashboardLayoutComponent {
   @Input() titlePage!: string;
-  @Input() kpis:  { label: string, value: number }[] = [];
+  @Input() kpis!:  Kpi[];
 }
