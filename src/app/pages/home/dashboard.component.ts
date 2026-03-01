@@ -1,6 +1,9 @@
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { PieChartComponent } from 'src/app/components/charts/pie-chart/pie-chart.component';
+import { Kpi } from 'src/app/models/kpi.model';
+import { Olympic } from 'src/app/models/olympic.model';
+import { Participation } from 'src/app/models/participation.model';
 
 
 @Component({
@@ -14,7 +17,7 @@ export class DashboardComponent implements OnInit {
   public totalJOs: number = 0
   public error!:string
   public titlePage: string = "Medals per Country";
-  public kpis: { label: string, value: number }[] = [];  
+  public kpis!: Kpi[];  
 
   @ViewChild(PieChartComponent)
   pieChartComponent!: PieChartComponent;
@@ -22,18 +25,18 @@ export class DashboardComponent implements OnInit {
   constructor(private http:HttpClient) { }
 
   ngOnInit() {
-    this.http.get<any[]>(this.olympicUrl).pipe().subscribe(
+    this.http.get<Olympic[]>(this.olympicUrl).pipe().subscribe(
       (data) => {
         console.log(`Liste des données : ${JSON.stringify(data)}`);
         if (data && data.length > 0) {
-          this.totalJOs = Array.from(new Set(data.map((i: any) => i.participations.map((f: any) => f.year)).flat())).length;
-          const countries: string[] = data.map((i: any) => i.country);
+          this.totalJOs = Array.from(new Set(data.map((i: Olympic) => i.participations.map((f: Participation) => f.year)).flat())).length;
+          const countries: string[] = data.map((i: Olympic) => i.country);
           this.totalCountries = countries.length;
           this.kpis = [
             { label: 'Number of countries', value: this.totalCountries },
             { label: 'Number of JOs', value: this.totalJOs }
-          ];  
-          const medals = data.map((i: any) => i.participations.map((i: any) => (i.medalsCount)));
+          ]; 
+          const medals = data.map((i: Olympic) => i.participations.map((i: Participation) => (i.medalsCount)));
           const sumOfAllMedalsYears = medals.map((i) => i.reduce((acc: any, i: any) => acc + i, 0));
           this.pieChartComponent.buildChart(countries, sumOfAllMedalsYears);
         }
