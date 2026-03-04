@@ -1,10 +1,7 @@
-<app-dashboard-layout
-  [titlePage]="titlePage"
-  [kpis]="kpis">
-
+<app-dashboard-layout [titlePage]="titlePage" [kpis]="kpis">
   <div class="chart-container wrapper-container">
     <div class="container">
-      <app-line-chart></app-line-chart>
+      <app-line-chart [data]="countryMedalsByYears"></app-line-chart>
       <h2>Date</h2>
     </div>
   </div>

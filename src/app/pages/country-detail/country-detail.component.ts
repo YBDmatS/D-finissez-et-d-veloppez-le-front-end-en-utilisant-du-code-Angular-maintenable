@@ -1,64 +1,51 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from '@angular/router';
-import {LineChartComponent} from 'src/app/components/charts/line-chart/line-chart.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LineChartComponent } from 'src/app/components/charts/line-chart/line-chart.component';
+import { CountryMedalsByYear } from 'src/app/models/CountryMedalsByYear';
 import { Kpi } from 'src/app/models/kpi.model';
-import { Olympic } from 'src/app/models/olympic.model';
-import { Participation } from 'src/app/models/participation.model';
-
+import { OlympicService } from 'src/app/services/olympic.service';
 
 @Component({
   selector: 'app-country-detail',
   templateUrl: './country-detail.component.html',
-  styleUrls: ['./country-detail.component.scss']
+  styleUrls: ['./country-detail.component.scss'],
 })
 export class CountryDetailComponent implements OnInit {
-  private olympicUrl = './assets/mock/olympic.json';
-  public titlePage: string = '';
-  public totalEntries: any = 0;
-  public totalMedals: number = 0;
-  public totalAthletes: number = 0;
+  public titlePage = 'Aucun pays sélectionné';
+  public kpis!: Kpi[];
+  public countryMedalsByYears!: CountryMedalsByYear[];
   public error!: string;
-  public kpis!: Kpi[];  
+
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly olympicService = inject(OlympicService);
 
   @ViewChild(LineChartComponent)
   lineChartComponent!: LineChartComponent;
 
-  constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient) {
-  }
-
   ngOnInit() {
-    let countryId: string | null = null
-    this.route.paramMap.subscribe((param: ParamMap) => countryId = param.get('id'));
-    this.http.get<Olympic[]>(this.olympicUrl).pipe().subscribe(
-      (data) => {
-        if (data && data.length > 0) {
-          const selectedCountry = data.find((i: Olympic) => i.country === countryId);
+    const id = Number(this.route.snapshot.paramMap.get('id') || '');
 
-          if (!selectedCountry) {
-            this.router.navigate(['/']);
-            return;
-          }
-          this.titlePage = selectedCountry.country;
-          const participations = selectedCountry?.participations.map((i: Participation) => i);
-          this.totalEntries = participations?.length ?? 0;
-          const years = selectedCountry?.participations.map((i: Participation) => i.year) ?? [];
-          const medals = selectedCountry?.participations.map((i: Participation) => i.medalsCount.toString()) ?? [];
-          this.totalMedals = medals.reduce((accumulator: any, item: any) => accumulator + parseInt(item), 0);
-          const nbAthletes = selectedCountry?.participations.map((i: Participation) => i.athleteCount.toString()) ?? []
-          this.totalAthletes = nbAthletes.reduce((accumulator: any, item: any) => accumulator + parseInt(item), 0);
-          this.kpis = [
-            { label: 'Number of entries', value: this.totalEntries },
-            { label: 'Total Number of medals', value: this.totalMedals },
-            { label: 'Total Number of athletes', value: this.totalAthletes }
-          ];
-          this.lineChartComponent.buildChart(years, medals);
+    this.olympicService.getCountryDetailById(id).subscribe({
+      next: (country) => {
+        if (!country) {
+          this.router.navigate(['/']);
+          return;
         }
+        this.titlePage = country.country;
       },
-      (error: HttpErrorResponse) => {
-        this.error = error.message
-      }
-    );
-  }
+    });
 
+    this.olympicService.getCountryKpis(id).subscribe({
+      next: (kpis) => (this.kpis = kpis),
+      error: (error: HttpErrorResponse) => (this.error = error.message),
+    });
+
+    this.olympicService.getCountryMedalsByYear(id).subscribe({
+      next: (data) => {
+        this.countryMedalsByYears = data;
+      },
+    });
+  }
 }

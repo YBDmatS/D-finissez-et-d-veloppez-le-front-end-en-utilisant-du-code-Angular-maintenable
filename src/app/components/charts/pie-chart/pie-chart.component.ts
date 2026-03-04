@@ -1,43 +1,70 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Chart } from 'chart.js/auto';
+import { CountryMedalTotal } from 'src/app/models/CountryMedalTotal';
 
 @Component({
   selector: 'app-pie-chart',
   templateUrl: './pie-chart.component.html',
-  styleUrl: './pie-chart.component.scss'
+  styleUrl: './pie-chart.component.scss',
 })
-export class PieChartComponent {
-  
-  public pieChart!: Chart<"pie", number[], string>;
+export class PieChartComponent implements OnChanges, OnDestroy {
+  @Input() data: CountryMedalTotal[] = [];
+  public pieChart!: Chart<'pie', number[], string>;
+  private readonly router = inject(Router);
 
-  constructor(private router: Router) { }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data.length) {
+      this.renderChart();
+    }
+  }
 
-  buildChart(countries: string[], sumOfAllMedalsYears: number[]) {
-    const pieChart = new Chart("DashboardPieChart", {
+  ngOnDestroy(): void {
+    this.pieChart?.destroy();
+  }
+
+  private renderChart(): void {
+    if (!this.data || this.data.length === 0) return;
+
+    this.pieChart?.destroy();
+
+    const labels = this.data.map((d) => d.country);
+    const values = this.data.map((d) => d.total);
+
+    const pieChart = new Chart('DashboardPieChart', {
       type: 'pie',
       data: {
-        labels: countries,
-        datasets: [{
-          label: 'Medals',
-          data: sumOfAllMedalsYears,
-          backgroundColor: ['#0b868f', '#adc3de', '#7a3c53', '#8f6263', 'orange', '#94819d'],
-          hoverOffset: 4
-        }],
+        labels: labels,
+        datasets: [
+          {
+            label: 'Medals',
+            data: values,
+            backgroundColor: ['#0b868f', '#adc3de', '#7a3c53', '#8f6263', 'orange', '#94819d'],
+            hoverOffset: 4,
+          },
+        ],
       },
       options: {
         aspectRatio: 2.5,
         onClick: (e) => {
           if (e.native) {
-            const points = pieChart.getElementsAtEventForMode(e.native, 'point', { intersect: true }, true)
+            const points = pieChart.getElementsAtEventForMode(
+              e.native,
+              'point',
+              { intersect: true },
+              true,
+            );
             if (points.length) {
               const firstPoint = points[0];
-              const countryId = pieChart.data.labels ? pieChart.data.labels[firstPoint.index] : '';
-              this.router.navigate(['country', countryId]);
+              const index = firstPoint.index;
+              const countryId = this.data[index]?.id; // <-- change only this part
+              if (countryId !== undefined && countryId !== null) {
+                this.router.navigate(['country', countryId]);
+              }
             }
           }
-        }
-      }
+        },
+      },
     });
     this.pieChart = pieChart;
   }
