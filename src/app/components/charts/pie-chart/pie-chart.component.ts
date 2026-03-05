@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Chart } from 'chart.js/auto';
-import { CountryMedalTotal } from 'src/app/models/CountryMedalTotal';
+import { CountryMedalTotal } from 'src/app/models/view-models/CountryMedalTotal.model';
 
 @Component({
   selector: 'app-pie-chart',

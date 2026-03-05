@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map, shareReplay } from 'rxjs';
-import { CountryMedalTotal } from '../models/CountryMedalTotal';
-import { CountryMedalsByYear } from '../models/CountryMedalsByYear';
-import { Kpi } from '../models/kpi.model';
-import { Olympic } from '../models/olympic.model';
-import { Participation } from '../models/participation.model';
+import { Olympic } from '../models/domain/olympic.model';
+import { Participation } from '../models/domain/participation.model';
+import { CountryMedalTotal } from '../models/view-models/CountryMedalTotal.model';
+import { CountryMedalsByYear } from '../models/view-models/CountryMedalsByYear.model';
+import { Kpi } from '../models/view-models/kpi.model';
 
 @Injectable({
   providedIn: 'root',
