@@ -1,12 +1,10 @@
 <div>
   <div class="center">
-      <div>{{ titlePage }}</div>
+    <div>{{ titlePage }}</div>
   </div>
   <div class="split">
     @for (kpi of kpis; track kpi.label) {
-      <app-kpi-card 
-        [kpi]="kpi">
-      </app-kpi-card>
+      <app-kpi-card [kpi]="kpi"> </app-kpi-card>
     }
   </div>
 </div>
