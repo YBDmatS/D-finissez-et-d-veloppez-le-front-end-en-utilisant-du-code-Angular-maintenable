@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Kpi } from 'src/app/models/kpi.model';
+import { Kpi } from 'src/app/models/view-models/kpi.model';
 
 @Component({
   selector: 'app-header',

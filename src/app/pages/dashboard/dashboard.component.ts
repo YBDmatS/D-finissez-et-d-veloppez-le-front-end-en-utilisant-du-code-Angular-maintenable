@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
-import { CountryMedalTotal } from 'src/app/models/CountryMedalTotal';
-import { Kpi } from 'src/app/models/kpi.model';
+import { CountryMedalTotal } from 'src/app/models/view-models/CountryMedalTotal.model';
+import { Kpi } from 'src/app/models/view-models/kpi.model';
 import { OlympicService } from 'src/app/services/olympic.service';
 
 @Component({
