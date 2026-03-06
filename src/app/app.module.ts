@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LineChartComponent } from './components/charts/line-chart/line-chart.component';
 import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
-import { HeaderComponent } from './components/header/header.component';
+import { DashboardHeaderComponent } from './components/dashboard-header/dashboard-header.component';
 import { KpiCardComponent } from './components/kpi-card/kpi-card.component';
 import { DashboardLayoutComponent } from './components/layouts/dashboard-layout/dashboard-layout.component';
 import { CountryDetailComponent } from './pages/country-detail/country-detail.component';
@@ -21,7 +21,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     PieChartComponent,
     LineChartComponent,
     KpiCardComponent,
-    HeaderComponent,
+    DashboardHeaderComponent,
     DashboardLayoutComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
