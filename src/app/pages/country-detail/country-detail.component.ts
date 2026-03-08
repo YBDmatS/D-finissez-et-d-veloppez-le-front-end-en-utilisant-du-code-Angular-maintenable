@@ -2,8 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LineChartComponent } from 'src/app/components/charts/line-chart/line-chart.component';
-import { CountryMedalsByYear } from 'src/app/models/view-models/CountryMedalsByYear.model';
-import { Kpi } from 'src/app/models/view-models/kpi.model';
+import { CountryMedalsByYear } from 'src/app/models/view-models/CountryMedalsByYear.vm';
+import { Kpi } from 'src/app/models/view-models/kpi.vm';
 import { OlympicService } from 'src/app/services/olympic.service';
 
 @Component({
