@@ -3,9 +3,10 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map, shareReplay } from 'rxjs';
 import { Olympic } from '../models/domain/olympic.model';
 import { Participation } from '../models/domain/participation.model';
-import { CountryMedalTotal } from '../models/view-models/CountryMedalTotal.model';
-import { CountryMedalsByYear } from '../models/view-models/CountryMedalsByYear.model';
-import { Kpi } from '../models/view-models/kpi.model';
+import { CountryMedalTotal } from '../models/view-models/CountryMedalTotal.vm';
+import { CountryMedalsByYear } from '../models/view-models/CountryMedalsByYear.vm';
+import { DashboardPageVm } from '../models/view-models/dashboard-page.vm';
+import { Kpi } from '../models/view-models/kpi.vm';
 
 @Injectable({
   providedIn: 'root',
@@ -21,32 +22,20 @@ export class OlympicService {
     return this.olympics$;
   }
 
-  public getDashboardKpis(): Observable<Kpi[]> {
+  public getDashboardPageVm(): Observable<DashboardPageVm> {
     return this.olympics$.pipe(
       map((olympics: Olympic[]) => {
-        const totalCountries = olympics.length;
+        const medalTotals = this.buildCountryMedalTotals(olympics);
+        const kpis = this.buildDashboardKpis(olympics);
 
-        const years = new Set(
-          olympics.flatMap((o: Olympic) => o.participations.map((p: Participation) => p.year)),
-        );
-
-        return [
-          { label: 'Number of countries', value: totalCountries },
-          { label: 'Number of JOs', value: years.size },
-        ];
+        return {
+          titlePage: 'Medals per Country',
+          kpis,
+          medalTotals,
+          loading: false,
+          error: null,
+        };
       }),
-    );
-  }
-
-  public getMedalTotalsByCountry(): Observable<CountryMedalTotal[]> {
-    return this.olympics$.pipe(
-      map((olympics: Olympic[]) =>
-        olympics.map((o: Olympic) => ({
-          id: o.id,
-          country: o.country,
-          total: o.participations.reduce((sum: number, p: Participation) => sum + p.medalsCount, 0),
-        })),
-      ),
     );
   }
 
@@ -100,5 +89,34 @@ export class OlympicService {
         olympics.find((o: Olympic) => o.country.toLowerCase() === name.toLowerCase()),
       ),
     );
+  }
+
+  private buildDashboardKpis(olympics: Olympic[]): Kpi[] {
+    const totalCountries = olympics.length;
+
+    const years = new Set(
+      olympics.flatMap((o: Olympic) => o.participations.map((p: Participation) => p.year)),
+    );
+
+    return [
+      { label: 'Number of countries', value: totalCountries },
+      { label: 'Number of JOs', value: years.size },
+    ];
+  }
+
+  private buildCountryMedalTotals(olympics: Olympic[]): CountryMedalTotal[] {
+    return olympics
+      .map((o: Olympic) => ({
+        id: o.id,
+        country: o.country,
+        total: o.participations.reduce((sum: number, p: Participation) => sum + p.medalsCount, 0),
+      }))
+      .sort((a: CountryMedalTotal, b: CountryMedalTotal) => {
+        if (b.total !== a.total) {
+          return b.total - a.total;
+        }
+
+        return a.country.localeCompare(b.country);
+      });
   }
 }

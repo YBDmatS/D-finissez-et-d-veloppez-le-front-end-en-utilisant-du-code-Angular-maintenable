@@ -1,17 +1,19 @@
-<section class="hero-section">
-  <div class="hero-content">
-    <h1>Olympic games app</h1>
-    <p class="introduction-text">
-      TéléSport propose une section « Jeux Olympiques » qui permet de visualiser les performances
-      des pays au fil des éditions. Sur cette page, vous pouvez comparer le total de médailles
-      remportées par pays (toutes années confondues) et cliquer sur un pays pour accéder à ses
-      statistiques détaillées et à l'évolution de ses résultats.
-    </p>
-  </div>
-</section>
+@if (vm$ | async; as vm) {
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Olympic games app</h1>
+      <p class="introduction-text">
+        TéléSport propose une section « Jeux Olympiques » qui permet de visualiser les performances
+        des pays au fil des éditions. Sur cette page, vous pouvez comparer le total de médailles
+        remportées par pays (toutes années confondues) et cliquer sur un pays pour accéder à ses
+        statistiques détaillées et à l'évolution de ses résultats.
+      </p>
+    </div>
+  </section>
 
-<section class="dashboard-section">
-  <app-dashboard-layout [titlePage]="titlePage" [kpis]="kpis">
-    <app-pie-chart [data]="medalTotals"></app-pie-chart>
-  </app-dashboard-layout>
-</section>
+  <section class="dashboard-section">
+    <app-dashboard-layout [titlePage]="vm.titlePage" [kpis]="vm.kpis">
+      <app-pie-chart [data]="vm.medalTotals"></app-pie-chart>
+    </app-dashboard-layout>
+  </section>
+}

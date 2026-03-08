@@ -11,8 +11,8 @@ import {
 import { Router } from '@angular/router';
 import { Chart } from 'chart.js/auto';
 import { Subscription } from 'rxjs';
-import { CountryMedalTotal } from 'src/app/models/view-models/CountryMedalTotal.model';
-import { LegendItem } from '../../../models/view-models/LegendItem.model';
+import { CountryMedalTotal } from 'src/app/models/view-models/CountryMedalTotal.vm';
+import { LegendItem } from '../../../models/view-models/LegendItem.vm';
 import { generateColors } from './pie-chart-colors';
 import { ScreenSize, buildPieChartConfig } from './pie-chart-config.factory';
 import { pieLabelsLine } from './pie-labels-line.plugin';
