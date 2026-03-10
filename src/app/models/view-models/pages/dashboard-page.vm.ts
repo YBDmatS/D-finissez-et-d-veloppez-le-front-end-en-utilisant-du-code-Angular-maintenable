@@ -1,5 +1,5 @@
-import { CountryMedalTotal } from './CountryMedalTotal.vm';
-import { Kpi } from './kpi.vm';
+import { CountryMedalTotal } from '../components/country-medal-total.vm';
+import { Kpi } from '../components/kpi.vm';
 
 export interface DashboardPageVm {
   titlePage: string;

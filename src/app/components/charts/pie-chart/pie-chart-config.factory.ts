@@ -6,6 +6,7 @@ export interface PieChartConfigOptions {
   labels: string[];
   values: number[];
   colors: string[];
+  hoverColors: string[];
   screenSize: ScreenSize;
   plugin: Plugin<'pie'>;
   onClickIndex: (index: number) => void;
@@ -26,6 +27,7 @@ export function buildPieChartConfig({
   labels,
   values,
   colors,
+  hoverColors,
   screenSize,
   plugin,
   onClickIndex,
@@ -49,6 +51,7 @@ export function buildPieChartConfig({
           label: 'Medals',
           data: values,
           backgroundColor: colors,
+          hoverBackgroundColor: hoverColors,
           hoverOffset: 20,
         },
       ],

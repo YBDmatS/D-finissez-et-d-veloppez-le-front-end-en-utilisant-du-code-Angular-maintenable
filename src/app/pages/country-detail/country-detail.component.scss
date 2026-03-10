@@ -2,20 +2,6 @@
   display: block;
 }
 
-.wrapper-container {
-  display: flex;
-  justify-content: center;
-}
-
-.container {
-  width: 50%;
-
-  h2 {
-    text-align: center;
-    color: gray;
-  }
-}
-
 @media screen and (max-width: 62.5em) {
   .container {
     width: 100%;
