@@ -1,19 +1,24 @@
-@if (vm$ | async; as vm) {
-  <section class="hero-section">
-    <div class="hero-content">
-      <h1>Olympic games app</h1>
-      <p class="introduction-text">
-        TéléSport offers an "Olympic Games" section that lets you visualize countries' performances
-        across editions. On this page, you can compare the total medals won by country (all years
-        combined) and click on a country to access its detailed statistics and the evolution of its
-        results.
-      </p>
-    </div>
-  </section>
-
-  <section class="dashboard-section">
-    <app-dashboard-layout [titlePage]="vm.titlePage" [kpis]="vm.kpis">
-      <app-pie-chart [data]="vm.medalTotals"></app-pie-chart>
-    </app-dashboard-layout>
-  </section>
-}
+<section class="hero-section">
+  <div class="hero-content">
+    <h1>Olympic games app</h1>
+    <p class="introduction-text">
+      TéléSport offers an "Olympic Games" section that lets you visualize countries' performances
+      across editions. On this page, you can compare the total medals won by country (all years
+      combined) and click on a country to access its detailed statistics and the evolution of its
+      results.
+    </p>
+  </div>
+</section>
+<section class="dashboard-section">
+  @if (vm$ | async; as vm) {
+    @if (vm.error) {
+      <app-state-message state="error" [message]="vm.error" />
+    } @else {
+      <app-dashboard-layout [titlePage]="vm.titlePage" [kpis]="vm.kpis">
+        <app-pie-chart [data]="vm.medalTotals"></app-pie-chart>
+      </app-dashboard-layout>
+    }
+  } @else {
+    <app-state-message state="loading" />
+  }
+</section>

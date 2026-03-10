@@ -24,17 +24,33 @@ export class OlympicService {
   public getDashboardPageVm(): Observable<DashboardPageVm> {
     return this.olympics$.pipe(
       map((olympics: Olympic[] | null) => {
-        const medalTotals = this.buildCountryMedalTotals(olympics ?? []);
-        const kpis = this.buildDashboardKpis(olympics ?? []);
+        if (!olympics) {
+          return {
+            titlePage: 'Error',
+            kpis: [],
+            medalTotals: [],
+            loading: false,
+            error: 'No data available.',
+          };
+        }
 
         return {
           titlePage: 'Medals per Country',
-          kpis,
-          medalTotals,
+          kpis: this.buildDashboardKpis(olympics ?? []),
+          medalTotals: this.buildCountryMedalTotals(olympics ?? []),
           loading: false,
           error: null,
         };
       }),
+      catchError((error: unknown) =>
+        of({
+          titlePage: 'Error',
+          kpis: [],
+          medalTotals: [],
+          loading: false,
+          error: this.errorMapper.toMessage(error),
+        }),
+      ),
     );
   }
 
