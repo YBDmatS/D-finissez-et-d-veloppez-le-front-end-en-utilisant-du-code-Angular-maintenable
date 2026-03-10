@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map, shareReplay } from 'rxjs';
+import { Observable, catchError, map, of, shareReplay } from 'rxjs';
 import { Olympic } from '../models/domain/olympic.model';
 import { Participation } from '../models/domain/participation.model';
 import { CountryDetailPageVm } from '../models/view-models/CountryDetail-page.vm';
@@ -8,6 +8,7 @@ import { CountryMedalTotal } from '../models/view-models/CountryMedalTotal.vm';
 import { CountryMedalsByYear } from '../models/view-models/CountryMedalsByYear.vm';
 import { DashboardPageVm } from '../models/view-models/dashboard-page.vm';
 import { Kpi } from '../models/view-models/kpi.vm';
+import { ErrorMapperService } from './error-mapper.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ import { Kpi } from '../models/view-models/kpi.vm';
 export class OlympicService {
   private readonly olympicUrl = './assets/mock/olympic.json';
   private readonly http = inject(HttpClient);
+  private readonly errorMapper = inject(ErrorMapperService);
   private readonly olympics$: Observable<Olympic[]> = this.http
     .get<Olympic[]>(this.olympicUrl)
     .pipe(shareReplay(1));
@@ -40,18 +42,34 @@ export class OlympicService {
     return this.olympics$.pipe(
       map((olympics: Olympic[] | null) => {
         const o: Olympic | undefined = (olympics ?? []).find((o: Olympic) => o.id === countryId);
-        const kpis = this.buildCountryKpis(o);
-        const countryMedalsByYears = this.buildCountryMedalsByYear(o);
-        const titlePage = this.buildCountryTitlePage(o);
+
+        if (!o) {
+          return {
+            titlePage: 'Error',
+            kpis: [],
+            countryMedalsByYears: [],
+            loading: false,
+            error: 'No country found with this ID.',
+          };
+        }
 
         return {
-          titlePage,
-          kpis,
-          countryMedalsByYears,
+          titlePage: this.buildCountryTitlePage(o),
+          kpis: this.buildCountryKpis(o),
+          countryMedalsByYears: this.buildCountryMedalsByYear(o),
           loading: false,
           error: null,
         };
       }),
+      catchError((error: unknown) =>
+        of({
+          titlePage: 'Error',
+          kpis: [],
+          countryMedalsByYears: [],
+          loading: false,
+          error: this.errorMapper.toMessage(error),
+        }),
+      ),
     );
   }
 

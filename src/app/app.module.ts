@@ -8,6 +8,7 @@ import { PieChartComponent } from './components/charts/pie-chart/pie-chart.compo
 import { DashboardHeaderComponent } from './components/dashboard-header/dashboard-header.component';
 import { KpiCardComponent } from './components/kpi-card/kpi-card.component';
 import { DashboardLayoutComponent } from './components/layouts/dashboard-layout/dashboard-layout.component';
+import { StateMessageComponent } from './components/ui/state-message/state-message.component';
 import { CountryDetailComponent } from './pages/country-detail/country-detail.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
@@ -23,6 +24,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     KpiCardComponent,
     DashboardHeaderComponent,
     DashboardLayoutComponent,
+    StateMessageComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [provideHttpClient()],
