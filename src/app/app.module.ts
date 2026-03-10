@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BackButtonComponent } from './components/back-button/back-button.component';
 import { LineChartComponent } from './components/charts/line-chart/line-chart.component';
 import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
 import { DashboardHeaderComponent } from './components/dashboard-header/dashboard-header.component';
@@ -25,6 +26,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
     DashboardHeaderComponent,
     DashboardLayoutComponent,
     StateMessageComponent,
+    BackButtonComponent,
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [provideHttpClient()],
