@@ -1,3 +1,7 @@
+:host {
+  display: block;
+}
+
 .wrapper-container {
   display: flex;
   justify-content: center;
@@ -5,13 +9,19 @@
 
 .container {
   width: 50%;
+
   h2 {
     text-align: center;
     color: gray;
   }
 }
 
-@media screen and (max-width: 1000px) {
+.center {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+@media screen and (max-width: 62.5em) {
   .container {
     width: 100%;
   }
