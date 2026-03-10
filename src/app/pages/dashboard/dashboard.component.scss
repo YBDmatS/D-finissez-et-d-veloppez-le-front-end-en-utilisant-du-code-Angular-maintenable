@@ -2,12 +2,12 @@
   background: linear-gradient(135deg, #043539 0%, #0b868f 100%);
   color: white;
   padding: 3rem 2rem;
-  margin-bottom: 1rem;
+  margin: 0.25rem 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
   .hero-content {
-    max-width: 900px;
+    max-width: 56.25rem;
     margin: 0 auto;
 
     h1 {
@@ -30,22 +30,7 @@
   }
 }
 
-.dashboard-section {
-  padding: 0 2rem 2rem 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 0 1rem 1rem 1rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 0.75rem 0.75rem 0.75rem;
-  }
-}
-
-// Responsive container principal
-@media (max-width: 768px) {
+@media (max-width: 48em) {
   .hero-section {
     padding: 2rem 1.5rem;
     margin-bottom: 2rem;
