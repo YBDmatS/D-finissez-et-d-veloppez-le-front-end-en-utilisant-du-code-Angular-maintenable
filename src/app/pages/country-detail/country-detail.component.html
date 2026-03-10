@@ -1,12 +1,7 @@
 @if (vm$ | async; as vm) {
   @if (vm.error) {
     <app-state-message state="error" [message]="vm.error" />
-    <div class="center">
-      <button class="btn-back" (click)="goBack()">
-        <span class="material-symbols-outlined">undo</span>
-        Go back
-      </button>
-    </div>
+    <app-back-button></app-back-button>
   } @else {
     <app-dashboard-layout [titlePage]="vm.titlePage" [kpis]="vm.kpis">
       <div class="wrapper-container">
@@ -16,10 +11,7 @@
         </div>
       </div>
       <div class="center">
-        <button class="btn-back" (click)="goBack()">
-          <span class="material-symbols-outlined">undo</span>
-          Go back
-        </button>
+        <app-back-button></app-back-button>
       </div>
     </app-dashboard-layout>
   }

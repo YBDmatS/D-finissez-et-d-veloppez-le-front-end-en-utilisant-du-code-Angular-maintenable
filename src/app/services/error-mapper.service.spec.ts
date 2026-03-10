@@ -34,11 +34,6 @@ describe('ErrorMapperService', () => {
     expect(service.toMessage(error)).toBe('Unexpected server error (403).');
   });
 
-  it('should return the error message for a generic Error', () => {
-    const error = new Error('Something went wrong');
-    expect(service.toMessage(error)).toBe('Something went wrong');
-  });
-
   it('should return a fallback message for unknown errors', () => {
     expect(service.toMessage('unknown')).toBe('An unexpected error occurred.');
   });

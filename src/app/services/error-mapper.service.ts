@@ -16,7 +16,7 @@ export class ErrorMapperService {
           return `Unexpected server error (${error.status}).`;
       }
     }
-    if (error instanceof Error) return error.message;
+
     return 'An unexpected error occurred.';
   }
 }
