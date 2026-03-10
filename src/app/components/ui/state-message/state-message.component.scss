@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.state-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 480px;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 1.1rem;
+
+  &--loading {
+    color: #555;
+  }
+
+  &--error {
+    color: #c0392b;
+    background-color: #fdecea;
+    border: 1px solid #e74c3c;
+  }
+
+  &--empty {
+    color: #777;
+  }
+}
