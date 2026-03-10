@@ -9,7 +9,7 @@
   align-items: center;
 }
 
-.center {
+.header-center {
   display: flex;
   justify-content: center;
   margin: 0.25rem;
@@ -18,7 +18,7 @@
     width: 15rem;
     font-size: clamp(1.1rem, 2.5vw, 1.6rem);
     white-space: nowrap;
-    background: #0b868f;
+    background: var(--color-primary);
     padding: 0.625rem;
     border-radius: 10px;
     color: white;

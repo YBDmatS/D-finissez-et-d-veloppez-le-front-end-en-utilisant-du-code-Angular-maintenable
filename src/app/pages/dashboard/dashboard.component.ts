@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DashboardPageVm } from 'src/app/models/view-models/dashboard-page.vm';
+import { DashboardPageVm } from 'src/app/models/view-models/pages/dashboard-page.vm';
 import { OlympicService } from 'src/app/services/olympic.service';
 
 @Component({

@@ -3,11 +3,11 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, map, of, shareReplay } from 'rxjs';
 import { Olympic } from '../models/domain/olympic.model';
 import { Participation } from '../models/domain/participation.model';
-import { CountryDetailPageVm } from '../models/view-models/CountryDetail-page.vm';
-import { CountryMedalTotal } from '../models/view-models/CountryMedalTotal.vm';
-import { CountryMedalsByYear } from '../models/view-models/CountryMedalsByYear.vm';
-import { DashboardPageVm } from '../models/view-models/dashboard-page.vm';
-import { Kpi } from '../models/view-models/kpi.vm';
+import { CountryMedalTotal } from '../models/view-models/components/country-medal-total.vm';
+import { CountryMedalsByYear } from '../models/view-models/components/country-medals-by-year.vm';
+import { Kpi } from '../models/view-models/components/kpi.vm';
+import { CountryDetailPageVm } from '../models/view-models/pages/country-detail-page.vm';
+import { DashboardPageVm } from '../models/view-models/pages/dashboard-page.vm';
 import { ErrorMapperService } from './error-mapper.service';
 
 @Injectable({

@@ -8,6 +8,7 @@ import { Chart } from 'chart.js/auto';
 })
 export class LineChartComponent implements OnChanges, OnDestroy {
   @Input() data: { year: number; medals: number }[] = [];
+  @Input() color = '#0b868f';
   public lineChart!: Chart<'line', number[], number>;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -36,7 +37,8 @@ export class LineChartComponent implements OnChanges, OnDestroy {
           {
             label: 'medals',
             data: values,
-            backgroundColor: '#0b868f',
+            backgroundColor: this.color,
+            borderColor: this.color,
           },
         ],
       },

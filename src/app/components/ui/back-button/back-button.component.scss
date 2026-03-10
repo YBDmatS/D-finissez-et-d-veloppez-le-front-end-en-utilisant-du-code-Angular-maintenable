@@ -8,12 +8,12 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1.25rem;
-  border: 2px solid #0b868f;
+  border: 2px solid var(--color-primary);
   border-radius: 2rem;
   background: transparent;
   font-size: 1rem;
   font-weight: 600;
-  color: #0b868f;
+  color: var(--color-primary);
   cursor: pointer;
   transition:
     background-color 0.2s ease,

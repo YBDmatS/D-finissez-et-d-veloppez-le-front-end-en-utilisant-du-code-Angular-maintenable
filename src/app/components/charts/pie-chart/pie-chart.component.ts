@@ -11,9 +11,9 @@ import {
 import { Router } from '@angular/router';
 import { Chart } from 'chart.js/auto';
 import { Subscription } from 'rxjs';
-import { CountryMedalTotal } from 'src/app/models/view-models/CountryMedalTotal.vm';
-import { LegendItem } from '../../../models/view-models/LegendItem.vm';
-import { generateColors } from './pie-chart-colors';
+import { CountryMedalTotal } from 'src/app/models/view-models/components/country-medal-total.vm';
+import { LegendItem } from '../../../models/view-models/components/legend-item.vm';
+import { generateColors, generateHoverColors } from './pie-chart-colors';
 import { ScreenSize, buildPieChartConfig } from './pie-chart-config.factory';
 import { pieLabelsLine } from './pie-labels-line.plugin';
 
@@ -27,6 +27,8 @@ export class PieChartComponent implements OnChanges, OnInit, OnDestroy {
   @Input() data: CountryMedalTotal[] = [];
 
   public legendItems: LegendItem[] = [];
+  private colors: string[] = [];
+  private hoverColors: string[] = [];
   private pieChart!: Chart<'pie', number[], string>;
 
   private readonly router = inject(Router);
@@ -62,10 +64,11 @@ export class PieChartComponent implements OnChanges, OnInit, OnDestroy {
     if (!this.data?.length) return;
     this.pieChart?.destroy();
 
-    const colors = generateColors(this.data.length);
+    this.colors = generateColors(this.data.length);
+    this.hoverColors = generateHoverColors(this.data.length);
     const useHtmlLegend = this.screenSize === 'xsmall' || this.screenSize === 'small';
     this.legendItems = useHtmlLegend
-      ? this.data.map((d, i) => ({ label: d.country, color: colors[i] }))
+      ? this.data.map((d, i) => ({ label: d.country, color: this.colors[i] }))
       : [];
 
     this.pieChart = new Chart(
@@ -73,7 +76,8 @@ export class PieChartComponent implements OnChanges, OnInit, OnDestroy {
       buildPieChartConfig({
         labels: this.data.map((d) => d.country),
         values: this.data.map((d) => d.total),
-        colors,
+        colors: this.colors,
+        hoverColors: this.hoverColors,
         screenSize: this.screenSize,
         plugin: pieLabelsLine,
         onClickIndex: (index) => this.navigateToIndex(index),
@@ -83,7 +87,11 @@ export class PieChartComponent implements OnChanges, OnInit, OnDestroy {
 
   public navigateToIndex(index: number): void {
     const countryId = this.data[index]?.id;
-    if (countryId != null) this.router.navigate(['country', countryId]);
+    const color = this.hoverColors[index];
+    if (countryId != null)
+      this.router.navigate(['country', countryId], {
+        state: { color },
+      });
   }
 
   private getScreenSize(): ScreenSize {

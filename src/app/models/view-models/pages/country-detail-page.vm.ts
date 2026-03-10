@@ -1,5 +1,5 @@
-import { CountryMedalsByYear } from './CountryMedalsByYear.vm';
-import { Kpi } from './kpi.vm';
+import { CountryMedalsByYear } from '../components/country-medals-by-year.vm';
+import { Kpi } from '../components/kpi.vm';
 
 export interface CountryDetailPageVm {
   titlePage: string;
