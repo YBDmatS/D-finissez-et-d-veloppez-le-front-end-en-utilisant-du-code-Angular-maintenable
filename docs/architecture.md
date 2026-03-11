@@ -1,4 +1,4 @@
-# ARCHITECTURE.md
+﻿# ARCHITECTURE.md
 
 ## Objectif
 
@@ -36,32 +36,53 @@ src
 │   │   │   │   ├── line-chart.component.spec.ts
 │   │   │   │   └── line-chart.component.ts
 │   │   │   └── pie-chart
+│   │   │       ├── pie-chart-colors.ts
+│   │   │       ├── pie-chart-config.factory.ts
 │   │   │       ├── pie-chart.component.html
 │   │   │       ├── pie-chart.component.scss
 │   │   │       ├── pie-chart.component.spec.ts
-│   │   │       └── pie-chart.component.ts
-│   │   ├── header
-│   │   │   ├── header.component.html
-│   │   │   ├── header.component.scss
-│   │   │   ├── header.component.spec.ts
-│   │   │   └── header.component.ts
+│   │   │       ├── pie-chart.component.ts
+│   │   │       └── pie-labels-line.plugin.ts
+│   │   ├── dashboard-header
+│   │   │   ├── dashboard-header.component.html
+│   │   │   ├── dashboard-header.component.scss
+│   │   │   ├── dashboard-header.component.spec.ts
+│   │   │   └── dashboard-header.component.ts
 │   │   ├── kpi-card
 │   │   │   ├── kpi-card.component.html
 │   │   │   ├── kpi-card.component.scss
 │   │   │   ├── kpi-card.component.spec.ts
 │   │   │   └── kpi-card.component.ts
-│   │   └── layouts
-│   │       └── dashboard-layout
-│   │           ├── dashboard-layout.component.html
-│   │           ├── dashboard-layout.component.scss
-│   │           ├── dashboard-layout.component.spec.ts
-│   │           └── dashboard-layout.component.ts
+│   │   ├── layouts
+│   │   │   └── dashboard-layout
+│   │   │       ├── dashboard-layout.component.html
+│   │   │       ├── dashboard-layout.component.scss
+│   │   │       ├── dashboard-layout.component.spec.ts
+│   │   │       └── dashboard-layout.component.ts
+│   │   └── ui
+│   │       ├── back-button
+│   │       │   ├── back-button.component.html
+│   │       │   ├── back-button.component.scss
+│   │       │   ├── back-button.component.spec.ts
+│   │       │   └── back-button.component.ts
+│   │       └── state-message
+│   │           ├── state-message.component.html
+│   │           ├── state-message.component.scss
+│   │           ├── state-message.component.spec.ts
+│   │           └── state-message.component.ts
 │   ├── models
-│   │   ├── CountryMedalTotal.ts
-│   │   ├── CountryMedalsByYear.ts
-│   │   ├── kpi.model.ts
-│   │   ├── olympic.model.ts
-│   │   └── participation.model.ts
+│   │   ├── domain
+│   │   │   ├── olympic.model.ts
+│   │   │   └── participation.model.ts
+│   │   └── view-models
+│   │       ├── components
+│   │       │   ├── country-medal-total.vm.ts
+│   │       │   ├── country-medals-by-year.vm.ts
+│   │       │   ├── kpi.vm.ts
+│   │       │   └── legend-item.vm.ts
+│   │       └── pages
+│   │           ├── country-detail-page.vm.ts
+│   │           └── dashboard-page.vm.ts
 │   ├── pages
 │   │   ├── country-detail
 │   │   │   ├── country-detail.component.html
@@ -79,6 +100,8 @@ src
 │   │       ├── not-found.component.spec.ts
 │   │       └── not-found.component.ts
 │   └── services
+│       ├── error-mapper.service.spec.ts
+│       ├── error-mapper.service.ts
 │       ├── olympic.service.spec.ts
 │       └── olympic.service.ts
 ├── assets
@@ -86,9 +109,12 @@ src
 │   ├── images
 │   │   └── teleSport.png
 │   └── mock
-│       └── olympic.json
+│       ├── olympic.json
+│       ├── olympic.5.json
+│       ├── olympic.40.json
+│       └── olympic.empty.json
 ├── environments
-│   ├── environment.prod.ts
+│   ├── environment.development.ts
 │   └── environment.ts
 ├── favicon.ico
 ├── index.html
@@ -104,76 +130,50 @@ src
 flowchart LR
 
   subgraph Core
-     Router[Router]
-     App[AppComponent]
+    Router
   end
 
   subgraph Pages
-    Dashboard[DashboardComponent]
-    Country[CountryDetailComponent]
-    NotFound[NotFoundComponent]
+    Dashboard
+    Country
+    NotFound
   end
 
+  Router --> Dashboard & Country & NotFound
+
   subgraph Components
-    Layout[DashboardLayout]
-    Header[Header]
-    subgraph Charts[Charts]
-       PieChart[PieChartComponent]
-       LineChart[LineChartComponent]
-    end
-    Kpi[KpiCard]
-    StateMessage[StateMessageComponent]
+    Layout --> Header & Charts & StateMessage
+    Header --> KpiCard
+    Charts --> PieChart & LineChart
+    Country --> BackButton
+    NotFound --> BackButton & StateMessage
   end
 
   subgraph Services
-    Service[OlympicService]
-    ErrorMapper[ErrorMapperService]
+    Olympic --> ErrorMapper
   end
 
   subgraph Models
-	subgraph Domain
-	    Olympic[Olympic]
-	    Participation[Participation]
-	end
-    subgraph ViewModels
-	    KpiModel[Kpi]
-	    CountryMedals[CountryMedalsByYear]
-	    MedalTotal[CountryMedalTotal]
-	end
-	UiError[UiError]
+    subgraph DomainM[Domain]
+      VmOlympic[olympic]
+      VmParticipation[participation]
+    end
+    subgraph ViewModelsM[View models]
+      VmPages[pages:<br>dashboard‑page · country‑detail‑page]
+      VmComponents[components: <br>country‑medals‑by‑year · country‑medal‑total · kpi · legend‑item]
+    end
   end
 
-  Api[(API)]
+  API[(API)]
 
-  App --> Router
-  Router --> Dashboard
-  Router --> Country
-  Router --> NotFound
-
-  Service -.-> Api
-  Service --> Domain
-  Service --> ViewModels
-
-  ErrorMapper --> UiError
-
-  Dashboard --> Layout
-  Country --> Layout
-
-  Layout --> Header
-  Layout --> Charts
-  Header --> Kpi
-
-  NotFound --> StateMessage
-  Layout --> StateMessage
-
+  Dashboard & Country --> Layout
+  KpiCard & Charts --> Olympic
   StateMessage --> ErrorMapper
-  Service --> ErrorMapper
+  Olympic --> DomainM & ViewModelsM
+  Olympic -.-> API
 
-  Kpi --> Service
-  Charts --> Service
-
-  Api ~~~ ViewModels
-  PieChart ~~~ LineChart
+  Services ~~~ Models
+  ErrorMapper ~~~ Models
 ```
 
 ## Rôles des dossiers
@@ -225,9 +225,9 @@ flowchart LR
   - `@Input() titlePage: string`
   - `@Input() kpis: Kpi[]`
 - Template :
-  - affiche le `HeaderComponent` puis projette le contenu avec `<ng-content>`.
+  - affiche le `DashboardHeaderComponent` puis projette le contenu avec `<ng-content>`.
 
-### `HeaderComponent`
+### `DashboardHeaderComponent`
 
 - Rôle : afficher un titre et une liste de KPIs.
 - API :
@@ -274,11 +274,9 @@ flowchart LR
 
 ## Modèles TypeScript
 
-- `Olympic` et `Participation` : contrat de données conforme aux spécifications (structure du JSON).
-- `Kpi` : modèle UI simple `{ label: string; value: number }`.
-- `CountryMedalTotal` : modèle “Dashboard” `{ id; country; total }`.
-- `CountryMedalsByYear` : modèle “Détail” `{ year; medals }`.  
-   Note : dans ce code, `CountryMedalTotal.ts` et `CountryMedalsByYear.ts` sont des fichiers de modèle (même s’ils ne suivent pas le suffixe `.model.ts`).
+- `Olympic` et `Participation` (`models/domain/`) : contrat de données conforme aux spécifications (structure du JSON).
+- `Kpi` (`kpi.vm.ts`), `CountryMedalTotal` (`country-medal-total.vm.ts`), `CountryMedalsByYear` (`country-medals-by-year.vm.ts`), `LegendItem` (`legend-item.vm.ts`) : view-models partagés entre composants (`models/view-models/components/`).
+- `DashboardPageVm` (`dashboard-page.vm.ts`), `CountryDetailPageVm` (`country-detail-page.vm.ts`) : view-models agrégés par page (`models/view-models/pages/`), construits par le service et passés en entrée aux pages.
 
 ## Préparation à une future connexion back-end / API
 
@@ -294,24 +292,42 @@ L’architecture est déjà prête à remplacer le mock JSON par une API REST, c
   - états UI standardisés (loading/empty/error) via un composant dédié (ex: `StateMessageComponent`) ;
   - éventuellement un `HttpInterceptor` (logs, gestion erreurs, base URL, retry).
 
-## Points d’attention et améliorations possibles
+## Points d'attention et améliorations possibles
 
-Plusieurs axes d’amélioration peuvent être envisagés afin de renforcer la maintenabilité, la cohérence de l’interface et l’expérience utilisateur.
+Plusieurs axes d'amélioration ont été adressés au fil du développement. Les points restants concernent des évolutions à traiter dans un second temps, notamment lors de la connexion à une vraie API back-end (les données sont actuellement simulées via un mock JSON local).
+
+### Points traités
 
 - **Gestion des flux de données**  
-  Les pages utilisent actuellement plusieurs `subscribe()` directement dans les composants. Une évolution possible consisterait à exposer davantage d’`Observable` et à utiliser l’`async` pipe dans les templates afin de simplifier la gestion des flux et améliorer la maintenabilité du code.
+  Les pages n'utilisent plus de `subscribe()` direct : chaque page expose un unique Observable `vm$` consommé via le pipe `async` dans le template.
 
 - **Structuration des données dans les pages**  
-  Certains appels de données pourraient être regroupés afin de construire les informations nécessaires à l’affichage (titre, indicateurs et données du graphique) à partir d’un flux unique, ce qui rendrait la logique des pages plus claire et plus cohérente.
+  Les données de chaque page sont regroupées dans des view-models de page (`DashboardPageVm`, `CountryDetailPageVm`) construits par `OlympicService`, ce qui rend les pages déclaratives et sans logique de transformation.
 
-- **Cohérence du code et de l’arborescence**  
-  Le nommage des modèles pourrait être uniformisé (par exemple `CountryMedalTotal.model.ts`, `MedalByYear.model.ts`) afin d’améliorer la lisibilité de l’arborescence et la compréhension du rôle de chaque type. Un travail progressif de nettoyage et de factorisation du code peut également être poursuivi pour renforcer la clarté et la maintenabilité de l’application.
+- **Cohérence du code et de l'arborescence**  
+  Les modèles sont réorganisés en `models/domain/` (contrats JSON) et `models/view-models/` (view-models composants et pages), tous suffixés en `.vm.ts`.
 
-- **Amélioration de l’interface utilisateur**  
-  L’interface pourrait être enrichie afin de mieux présenter le contexte de l’application et améliorer la lisibilité générale (texte de présentation du dashboard, hiérarchie visuelle plus claire, mise en valeur des indicateurs et des graphiques).
+- **Amélioration de l'interface utilisateur**  
+  Un texte de présentation est intégré au dashboard (section hero) afin de contextualiser l'application pour l'utilisateur.
 
 - **Navigation et gestion des états**  
-  Le routing et la gestion des états pourraient être renforcés afin de rendre la navigation plus robuste et plus explicite pour l’utilisateur (gestion des erreurs, affichage des états _loading_, _empty_ ou _error_, gestion des routes invalides).
+  `ErrorMapperService` centralise la traduction des erreurs HTTP. `StateMessageComponent` couvre les états _loading_, _error_ et _empty_. `BackButtonComponent` gère le retour arrière. Les IDs de route invalides sont détectés côté composant avant tout appel service.
 
-- **Responsivité de l’interface**  
-  Enfin, la mise en page peut être améliorée afin de garantir une expérience fluide sur ordinateur, tablette et mobile, conformément aux attentes du cahier des charges qui prévoit une interface responsive et accessible.
+### Améliorations à venir
+
+> ⚠️ **En attente d'une vraie connexion API** — toutes les données proviennent actuellement d'un mock JSON local (`assets/mock/olympic.json`). La connexion à un back-end REST est requise pour valider et finaliser plusieurs des points ci-dessous.
+
+- **État `empty` non encore utilisé**  
+  `StateMessageComponent` supporte l'état `empty` mais il n'est pas encore déclenché (les listes vides n'en bénéficient pas). À brancher lorsque l'API pourra retourner des résultats vides distincts d'une erreur.
+
+- **`HttpInterceptor`**  
+  À ajouter pour centraliser la gestion des en-têtes (authentification, base URL), le retry automatique sur erreur réseau transitoire, et la journalisation des requêtes.
+
+- **Accessibilité (a11y)**  
+  Ajouter les attributs ARIA manquants (rôles, `aria-label` sur les graphiques Chart.js, navigation au clavier dans le pie-chart), et vérifier le contraste des couleurs.
+
+- **Lisibilité du pie-chart avec un grand nombre de pays**  
+  Au-delà de 25 pays environ, le pie-chart devient difficile à lire (portions trop petites, légende surchargée). Plusieurs approches peuvent être envisagées : limiter l'affichage aux N premiers pays, ajouter un filtre interactif, ou regrouper automatiquement les pays dont la part est inférieure à un seuil dans une section « Autres ». Ce dernier regroupement nécessite une adaptation du `PieChartComponent` (nouvelle entrée agrégée non cliquable) et de la logique dans `OlympicService` (`getMedalTotalsByCountry`).
+
+- **Tests unitaires à compléter**  
+  Les fichiers `.spec.ts` sont en place. Les tests des méthodes de `OlympicService`, des view-models de page et des composants UI (`StateMessageComponent`, `BackButtonComponent`) restent à écrire/enrichir.
