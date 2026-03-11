@@ -5,6 +5,5 @@ export interface CountryDetailPageVm {
   titlePage: string;
   kpis: Kpi[];
   countryMedalsByYears: CountryMedalsByYear[];
-  loading: boolean;
   error: string | null;
 }

@@ -5,6 +5,5 @@ export interface DashboardPageVm {
   titlePage: string;
   kpis: Kpi[];
   medalTotals: CountryMedalTotal[];
-  loading: boolean;
   error: string | null;
 }
