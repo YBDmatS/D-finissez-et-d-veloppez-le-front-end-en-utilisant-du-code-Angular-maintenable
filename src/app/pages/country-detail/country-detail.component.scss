@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+@media screen and (max-width: 62.5em) {
+  .container {
+    width: 100%;
+  }
+}

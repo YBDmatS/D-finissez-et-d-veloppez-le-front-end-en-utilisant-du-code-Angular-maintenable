@@ -1,0 +1,12 @@
+<canvas id="DashboardPieChart"></canvas>
+
+@if (legendItems.length) {
+  <div class="legend-list">
+    @for (item of legendItems; track item.label; let i = $index) {
+      <button type="button" class="legend-item" (click)="navigateToIndex(i)">
+        <span class="legend-color" [style.backgroundColor]="item.color"></span>
+        <span class="legend-label" [title]="item.label">{{ item.label }}</span>
+      </button>
+    }
+  </div>
+}

@@ -1,44 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
-.heading {
-    flex-direction: column;
+
+:root {
+  --color-primary: #0b868f;
 }
 
-.center {
-    display: flex;
-    justify-content: center;
-    margin: 5px;
-
-    div {
-        background: #0b868f;
-        padding: 10px;
-        border-radius: 10px;
-        color: white;
-    }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-.split {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 20px;
-    margin: 5px;
-
-    div {
-        padding: 10px;
-        border: solid #0b868f 1px;
-        border-radius: 10px;
-        color: gray;
-        margin: 0px;
-
-        p {
-            text-align: center;
-            margin: 0;
-        }
-
-        p:last-child {
-            font-weight: bold;
-            color: black;
-        }
-    }
+body {
+  margin: 0;
+  min-width: 22.5em;
+  overflow-x: auto;
 }
-

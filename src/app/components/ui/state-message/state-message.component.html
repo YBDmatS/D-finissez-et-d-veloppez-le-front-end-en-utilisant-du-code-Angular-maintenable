@@ -1,0 +1,17 @@
+@switch (state) {
+  @case ('loading') {
+    <div class="state-message state-message--loading" aria-live="polite">
+      <p>Loading...</p>
+    </div>
+  }
+  @case ('error') {
+    <div class="state-message state-message--error" role="alert">
+      <p>{{ message ?? 'An error occurred.' }}</p>
+    </div>
+  }
+  @case ('empty') {
+    <div class="state-message state-message--empty" aria-live="polite">
+      <p>{{ message ?? 'No data available.' }}</p>
+    </div>
+  }
+}

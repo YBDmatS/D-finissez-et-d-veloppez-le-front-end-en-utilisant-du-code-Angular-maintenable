@@ -1,0 +1,132 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable, catchError, map, of, shareReplay } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Olympic } from '../models/domain/olympic.model';
+import { Participation } from '../models/domain/participation.model';
+import { CountryMedalTotal } from '../models/view-models/components/country-medal-total.vm';
+import { CountryMedalsByYear } from '../models/view-models/components/country-medals-by-year.vm';
+import { Kpi } from '../models/view-models/components/kpi.vm';
+import { CountryDetailPageVm } from '../models/view-models/pages/country-detail-page.vm';
+import { DashboardPageVm } from '../models/view-models/pages/dashboard-page.vm';
+import { ErrorMapperService } from './error-mapper.service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class OlympicService {
+  private readonly olympicUrl = environment.olympicUrl;
+  private readonly http = inject(HttpClient);
+  private readonly errorMapper = inject(ErrorMapperService);
+  private readonly olympics$: Observable<Olympic[]> = this.http
+    .get<Olympic[]>(this.olympicUrl)
+    .pipe(shareReplay(1));
+
+  public getDashboardPageVm(): Observable<DashboardPageVm> {
+    return this.olympics$.pipe(
+      map((olympics: Olympic[]) => ({
+        titlePage: 'Medals per Country',
+        kpis: this.buildDashboardKpis(olympics),
+        medalTotals: this.buildCountryMedalTotals(olympics),
+        error: null,
+      })),
+      catchError((error: unknown) =>
+        of({
+          titlePage: 'Error',
+          kpis: [],
+          medalTotals: [],
+          error: this.errorMapper.toMessage(error),
+        }),
+      ),
+    );
+  }
+
+  public getCountryDetailPageVm(countryId: number): Observable<CountryDetailPageVm> {
+    return this.olympics$.pipe(
+      map((olympics: Olympic[]) => {
+        const o: Olympic | undefined = olympics.find((o: Olympic) => o.id === countryId);
+
+        if (!o) {
+          return {
+            titlePage: 'Error',
+            kpis: [],
+            countryMedalsByYears: [],
+            error: 'No country found with this ID.',
+          };
+        }
+
+        return {
+          titlePage: this.buildCountryTitlePage(o),
+          kpis: this.buildCountryKpis(o),
+          countryMedalsByYears: this.buildCountryMedalsByYear(o),
+          error: null,
+        };
+      }),
+      catchError((error: unknown) =>
+        of({
+          titlePage: 'Error',
+          kpis: [],
+          countryMedalsByYears: [],
+          error: this.errorMapper.toMessage(error),
+        }),
+      ),
+    );
+  }
+
+  private buildDashboardKpis(olympics: Olympic[]): Kpi[] {
+    const totalCountries = olympics.length;
+
+    const years = new Set(
+      olympics.flatMap((o: Olympic) => o.participations.map((p: Participation) => p.year)),
+    );
+
+    return [
+      { label: 'Number of countries', value: totalCountries },
+      { label: 'Number of JOs', value: years.size },
+    ];
+  }
+
+  private buildCountryMedalTotals(olympics: Olympic[]): CountryMedalTotal[] {
+    return olympics
+      .map((o: Olympic) => ({
+        id: o.id,
+        country: o.country,
+        total: o.participations.reduce((sum: number, p: Participation) => sum + p.medalsCount, 0),
+      }))
+      .sort((a: CountryMedalTotal, b: CountryMedalTotal) => {
+        if (b.total !== a.total) {
+          return b.total - a.total;
+        }
+
+        return a.country.localeCompare(b.country);
+      });
+  }
+
+  private buildCountryKpis(olympic: Olympic): Kpi[] {
+    const totalEntries = olympic.participations.length;
+    const totalMedals = olympic.participations.reduce(
+      (sum: number, p: Participation) => sum + p.medalsCount,
+      0,
+    );
+    const totalAthletes = olympic.participations.reduce(
+      (sum: number, p: Participation) => sum + p.athleteCount,
+      0,
+    );
+
+    return [
+      { label: 'Total Number of medals', value: totalMedals },
+      { label: 'Total Number of athletes', value: totalAthletes },
+      { label: 'Number of entries', value: totalEntries },
+    ];
+  }
+
+  private buildCountryMedalsByYear(olympic: Olympic): CountryMedalsByYear[] {
+    return olympic.participations
+      .map((p: Participation) => ({ year: p.year, medals: p.medalsCount }))
+      .sort((a: CountryMedalsByYear, b: CountryMedalsByYear) => a.year - b.year);
+  }
+
+  private buildCountryTitlePage(o: Olympic): string {
+    return o.country || 'Country without name';
+  }
+}

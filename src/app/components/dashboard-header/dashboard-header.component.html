@@ -1,0 +1,10 @@
+<div class="header-container">
+  <div class="header-center">
+    <h2>{{ titlePage }}</h2>
+  </div>
+  <div class="kpis">
+    @for (kpi of kpis; track kpi.label) {
+      <app-kpi-card [kpi]="kpi"> </app-kpi-card>
+    }
+  </div>
+</div>
