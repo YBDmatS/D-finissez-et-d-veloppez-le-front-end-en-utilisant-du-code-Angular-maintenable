@@ -13,7 +13,7 @@ export class CountryDetailComponent {
   private readonly olympicService = inject(OlympicService);
   private readonly route = inject(ActivatedRoute);
   private readonly id: number = Number(this.route.snapshot.paramMap.get('id'));
-  public readonly color: string = (history.state as { color?: string }).color ?? '#0b868f';
+  public readonly color: string = (history.state as { color?: string } | null)?.color ?? '#0b868f';
   public vm$: Observable<CountryDetailPageVm> =
     Number.isNaN(this.id) || this.id <= 0
       ? of({

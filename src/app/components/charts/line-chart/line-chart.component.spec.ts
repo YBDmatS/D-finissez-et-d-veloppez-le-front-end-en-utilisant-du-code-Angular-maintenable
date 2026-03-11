@@ -8,7 +8,7 @@ describe('LineChartComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LineChartComponent],
+      declarations: [LineChartComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LineChartComponent);

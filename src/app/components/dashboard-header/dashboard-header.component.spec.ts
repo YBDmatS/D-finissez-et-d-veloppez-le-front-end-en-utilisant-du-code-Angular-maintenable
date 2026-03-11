@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DashboardHeaderComponent } from './dashboard-header.component';
@@ -8,11 +9,14 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardHeaderComponent],
+      declarations: [DashboardHeaderComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardHeaderComponent);
     component = fixture.componentInstance;
+    component.titlePage = 'Test';
+    component.kpis = [];
     fixture.detectChanges();
   });
 
